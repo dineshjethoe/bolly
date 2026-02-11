@@ -1,0 +1,136 @@
+@page "/properties/{Id:int}"
+@using bolly.Models
+@inject IPropertyService PropertyService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+    @if (_isLoading)
+    {
+        <MudProgressCircular Indeterminate="true" Class="ma-2" />
+    }
+    else if (_property == null)
+    {
+        <MudAlert Severity="Severity.Error">
+            Property not found.
+        </MudAlert>
+    }
+    else
+    {
+        <MudBreadcrumbs Items="_breadcrumbs" Class="mb-6"></MudBreadcrumbs>
+
+        <MudGrid Class="mb-6">
+            <MudItem xs="12" md="8">
+                <MudImage Src="@_property.ImageUrl" Alt="@_property.Title" Style="width: 100%; border-radius: 8px;" />
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudCard Class="pa-6">
+                    <MudText Typo="Typo.h4" Class="mb-4">
+                        €@_property.Price.ToString("N0")
+                    </MudText>
+
+                    <div class="mb-4">
+                        <MudChip T="string" Color="Color.Primary" Size="Size.Small" Class="mr-2">@_property.Type</MudChip>
+                        <MudChip T="string" Color="Color.Success" Size="Size.Small">@_property.Status</MudChip>
+                    </div>
+
+                    <MudDivider Class="my-4" />
+
+                    <MudText Typo="Typo.subtitle2" Class="mb-2"><strong>Property Details</strong></MudText>
+
+                    @if (_property.Bedrooms > 0)
+                    {
+                        <div class="d-flex mb-2">
+                            <MudIcon Icon="@Icons.Material.Filled.Apartment" Class="mr-2" Color="Color.Primary" />
+                            <MudText Typo="Typo.body2">@_property.Bedrooms Bedrooms</MudText>
+                        </div>
+                    }
+
+                    @if (_property.Bathrooms > 0)
+                    {
+                        <div class="d-flex mb-2">
+                            <MudIcon Icon="@Icons.Material.Filled.Shower" Class="mr-2" Color="Color.Primary" />
+                            <MudText Typo="Typo.body2">@_property.Bathrooms Bathrooms</MudText>
+                        </div>
+                    }
+
+                    @if (_property.Parking > 0)
+                    {
+                        <div class="d-flex mb-2">
+                            <MudIcon Icon="@Icons.Material.Filled.DirectionsCar" Class="mr-2" Color="Color.Primary" />
+                            <MudText Typo="Typo.body2">@_property.Parking Parking Spaces</MudText>
+                        </div>
+                    }
+
+                    @if (_property.SquareFeet > 0)
+                    {
+                        <div class="d-flex mb-4">
+                            <MudIcon Icon="@Icons.Material.Filled.AspectRatio" Class="mr-2" Color="Color.Primary" />
+                            <MudText Typo="Typo.body2">@_property.SquareFeet.ToString("N0") Sq Ft</MudText>
+                        </div>
+                    }
+
+                    <MudDivider Class="my-4" />
+
+                    <MudText Typo="Typo.subtitle2" Class="mb-2"><strong>Agent Information</strong></MudText>
+                    <MudText Typo="Typo.body2" Class="mb-4">@_property.AgentName</MudText>
+
+                    <MudText Typo="Typo.subtitle2" Class="mb-2"><strong>Listed Date</strong></MudText>
+                    <MudText Typo="Typo.body2" Class="mb-6">@_property.ListedDate.ToString("MMMM dd, yyyy")</MudText>
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true" Class="mb-2">
+                        <MudIcon Icon="@Icons.Material.Filled.Phone" Class="mr-2" />
+                        Contact Agent
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" FullWidth="true">
+                        <MudIcon Icon="@Icons.Material.Filled.Email" Class="mr-2" />
+                        Email Inquiry
+                    </MudButton>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid>
+            <MudItem xs="12" md="8">
+                <MudCard Class="pa-6">
+                    <MudText Typo="Typo.h5" Class="mb-4">About This Property</MudText>
+                    <MudText Typo="Typo.body1">
+                        @_property.Description
+                    </MudText>
+
+                    <MudDivider Class="my-6" />
+
+                    <MudText Typo="Typo.h5" Class="mb-4">Location</MudText>
+                    <MudText Typo="Typo.body1" Class="mb-4">
+                        <MudIcon Icon="@Icons.Material.Filled.LocationOn" Color="Color.Primary" />
+                        @_property.Location
+                    </MudText>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    }
+</MudContainer>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Property? _property;
+    private bool _isLoading = true;
+    private List<BreadcrumbItem> _breadcrumbs = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _property = await PropertyService.GetPropertyByIdAsync(Id);
+        _isLoading = false;
+
+        if (_property != null)
+        {
+            _breadcrumbs = new()
+            {
+                new BreadcrumbItem("Home", href: "/"),
+                new BreadcrumbItem("Properties", href: "/properties"),
+                new BreadcrumbItem(_property.Title, href: null, disabled: true)
+            };
+        }
+    }
+}

@@ -1,0 +1,93 @@
+/* Navbar Custom Styles */
+.navbar-custom {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+:deep .navbar-custom.mud-appbar {
+    padding: 0;
+}
+
+/* Desktop Navigation Links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0 2rem;
+}
+
+.nav-item {
+    position: relative;
+    padding: 0.5rem 0;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+:deep .nav-item {
+    color: inherit;
+    text-decoration: none;
+}
+
+:deep .nav-item:hover {
+    color: var(--mud-palette-primary);
+}
+
+:deep .nav-item.active {
+    color: var(--mud-palette-primary);
+    font-weight: 600;
+}
+
+:deep .nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--mud-palette-primary);
+    border-radius: 2px;
+}
+
+/* Mobile Drawer Styling */
+:deep .mud-drawer {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+:deep .mud-drawer-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+:deep .mud-drawer-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+}
+
+/* Navigation Menu Items */
+:deep .mud-nav-menu {
+    padding: 0;
+    flex: 0 0 auto;
+}
+
+:deep .mud-divider {
+    flex-shrink: 0;
+}
+
+:deep .mud-nav-menu .mud-nav-link {
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    border-radius: 0;
+}
+
+:deep .mud-nav-menu .mud-nav-link.active {
+    background-color: rgba(var(--mud-palette-primary-rgb), 0.08);
+    border-left: 4px solid var(--mud-palette-primary);
+    padding-left: calc(1rem - 4px);
+    font-weight: 600;
+}
+
+:deep .mud-nav-menu .mud-nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}

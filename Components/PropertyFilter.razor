@@ -1,0 +1,232 @@
+@using bolly.Models
+@using System.Text.Json
+@inject HttpClient Http
+
+<MudPaper Class="pa-6 mb-6" Elevation="2">
+    <MudText Typo="Typo.h5" Class="mb-6"><strong>Snel Zoeken</strong></MudText>
+
+    <MudGrid Spacing="2">
+        <!-- Sale or Rent -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudSelect T="string" 
+                @bind-Value="@_filter.Status"
+                Label="Status"
+                Placeholder="Selecteer"
+                Clearable="true"
+                Dense="true"
+                @onchange="OnStatusChanged">
+                <MudSelectItem Value="@("Sale")">Te Koop</MudSelectItem>
+                <MudSelectItem Value="@("Rent")">Te Huur</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+
+        <!-- Property Type -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudSelect T="string" 
+                @bind-Value="@_filter.PropertyType"
+                Label="Soort Onroerend Goed"
+                Placeholder="Selecteer"
+                Clearable="true"
+                Dense="true">
+                @if (_propertyTypes != null)
+                {
+                    @foreach (var type in _propertyTypes)
+                    {
+                        <MudSelectItem Value="@type.Value">@type.Name</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </MudItem>
+
+        <!-- District -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudSelect T="string" 
+                @bind-Value="@_filter.District"
+                Label="District Omgeving"
+                Placeholder="Selecteer"
+                Clearable="true"
+                Dense="true">
+                @if (_districts != null)
+                {
+                    @foreach (var district in _districts)
+                    {
+                        <MudSelectItem Value="@district.Value">@district.Name</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </MudItem>
+
+        <!-- Price From -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudTextField T="decimal?" 
+                @bind-Value="@_filter.PriceFrom"
+                Label="Prijs Vanaf"
+                Placeholder="@GetPricePlaceholder()"
+                InputType="InputType.Number"
+                Clearable="true" />
+        </MudItem>
+
+        <!-- Price To -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudTextField T="decimal?" 
+                @bind-Value="@_filter.PriceTo"
+                Label="Prijs Tot"
+                Placeholder="@GetPricePlaceholder()"
+                InputType="InputType.Number"
+                Clearable="true" />
+        </MudItem>
+
+        <!-- Min Bedrooms -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudSelect T="string" 
+                @bind-Value="@_filter.MinBedrooms"
+                Label="Min. Slaapkamers"
+                Placeholder="Selecteer"
+                Clearable="true"
+                Dense="true">
+                @if (_bedrooms != null)
+                {
+                    @foreach (var bedroom in _bedrooms)
+                    {
+                        <MudSelectItem Value="@bedroom.Value">@bedroom.Name</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </MudItem>
+
+        <!-- Min Bathrooms -->
+        <MudItem xs="12" sm="6" md="2">
+            <MudSelect T="string" 
+                @bind-Value="@_filter.MinBathrooms"
+                Label="Min. Badkamers"
+                Placeholder="Selecteer"
+                Clearable="true"
+                Dense="true">
+                @if (_bathrooms != null)
+                {
+                    @foreach (var bathroom in _bathrooms)
+                    {
+                        <MudSelectItem Value="@bathroom.Value">@bathroom.Name</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </MudItem>
+
+        <!-- Search Button -->
+        <MudItem xs="12" Class="d-flex align-center pt-2">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium"
+                OnClick="@OnSearchClick" Class="mr-2">
+                <MudIcon Icon="@Icons.Material.Filled.Search" Class="mr-2" />
+                Zoek
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Medium"
+                OnClick="@ResetFilter">
+                Reset
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public EventCallback<SearchFilter> OnSearch { get; set; }
+
+    private List<DropdownItem>? _propertyTypes;
+    private List<DropdownItem>? _districts;
+    private List<DropdownItem>? _bedrooms;
+    private List<DropdownItem>? _bathrooms;
+
+    private FilterModel _filter = new FilterModel();
+
+    public class DropdownItem
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Value { get; set; }
+    }
+
+    public class FilterModel
+    {
+        public string? Status { get; set; }
+        public string? PropertyType { get; set; }
+        public string? District { get; set; }
+        public decimal? PriceFrom { get; set; }
+        public decimal? PriceTo { get; set; }
+        public string? MinBedrooms { get; set; }
+        public string? MinBathrooms { get; set; }
+    }
+
+    private string GetPricePlaceholder()
+    {
+        return _filter.Status == "Rent" ? "$" : "€";
+    }
+
+    private void OnStatusChanged()
+    {
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDropdownData();
+    }
+
+    private async Task LoadDropdownData()
+    {
+        try
+        {
+            _propertyTypes = await Http.GetFromJsonAsync<List<DropdownItem>>("data/property-types.json");
+            _districts = await Http.GetFromJsonAsync<List<DropdownItem>>("data/districts.json");
+            _bedrooms = await Http.GetFromJsonAsync<List<DropdownItem>>("data/bedrooms.json");
+            _bathrooms = await Http.GetFromJsonAsync<List<DropdownItem>>("data/bathrooms.json");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading data: {ex.Message}");
+        }
+    }
+
+    private async Task OnSearchClick()
+    {
+        var searchFilter = new SearchFilter
+        {
+            Location = _filter.District,
+            Type = ParsePropertyType(_filter.PropertyType),
+            Status = ParsePropertyStatus(_filter.Status),
+            MinPrice = _filter.PriceFrom,
+            MaxPrice = _filter.PriceTo
+        };
+        
+        await OnSearch.InvokeAsync(searchFilter);
+    }
+
+    private PropertyType? ParsePropertyType(string value)
+    {
+        return value switch
+        {
+            "house" => PropertyType.House,
+            "apartment" => PropertyType.Apartment,
+            "villa" => PropertyType.Villa,
+            "plot" => PropertyType.Plot,
+            "office" => PropertyType.Office,
+            "commercial" => PropertyType.Commercial,
+            "warehouse" => PropertyType.Warehouse,
+            _ => null
+        };
+    }
+
+    private PropertyStatus? ParsePropertyStatus(string value)
+    {
+        return value switch
+        {
+            "Sale" => PropertyStatus.Sale,
+            "Rent" => PropertyStatus.Rent,
+            _ => null
+        };
+    }
+
+    private void ResetFilter()
+    {
+        _filter = new FilterModel();
+    }
+}

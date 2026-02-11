@@ -1,0 +1,52 @@
+﻿@using bolly.Themes
+@using bolly.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject LanguageService LanguageService
+@inject IPropertyService PropertyService
+
+<MudThemeProvider Theme="@AppTheme.Theme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@if (_isInitialized)
+{
+    <CascadingAuthenticationState>
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Found>
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <MudContainer MaxWidth="MaxWidth.Large" Class="py-16">
+                        <MudAlert Severity="Severity.Error">
+                            <MudText Typo="Typo.h5" Class="mb-2"><strong>Page not found</strong></MudText>
+                            <MudText Typo="Typo.body1">Sorry, there's nothing at this address.</MudText>
+                        </MudAlert>
+                    </MudContainer>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingAuthenticationState>
+}
+else
+{
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <MudProgressCircular Indeterminate="true" />
+    </div>
+}
+
+@code {
+    private bool _isInitialized = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LanguageService.InitializeAsync();
+        if (PropertyService is PropertyService svc)
+        {
+            await svc.InitializeAsync();
+        }
+        _isInitialized = true;
+    }
+}

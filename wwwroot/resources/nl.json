@@ -1,0 +1,55 @@
+{
+  "nav": {
+    "home": "Thuis",
+    "properties": "Eigenschappen",
+    "about": "Over ons",
+    "contact": "Contact",
+    "menu": "Menu",
+    "toggleTheme": "Thema wijzigen",
+    "language": "Taal",
+    "dutch": "Nederlands",
+    "english": "Engels",
+    "login": "Inloggen",
+    "logout": "Uitloggen",
+    "admin": "Beheerder"
+  },
+  "footer": {
+    "dcRise": "RB Real Estate",
+    "rbRealEstate": "RB Onroerend Goed",
+    "tagline": "Van wortels tot daken, we groeien samen.",
+    "quickLinks": "Snelle Links",
+    "contact": "Contact",
+    "phone": "Telefoon",
+    "email": "E-mail",
+    "followUs": "Volg ons"
+  },
+  "pages": {
+    "properties": {
+      "title": "Alle Eigenschappen",
+      "loading": "Laden...",
+      "noResults": "Geen eigenschappen gevonden die aan uw criteria voldoen.",
+      "searching": "Zoeken..."
+    },
+    "about": {
+      "title": "Over RB Real Estate",
+      "mission": "Onze Missie",
+      "missionText": "Bij RB Real Estate geloven we dat het vinden van het perfecte pand eenvoudig, transparant en bevredigend moet zijn. Onze missie is om kopers, verkopers en huurders met elkaar in contact te brengen via een betrouwbaar, gebruiksvriendelijk platform dat onroerendgoedtransacties naadloos en succesvol maakt.",
+      "missionText2": "Van wortels tot daken, we groeien samen met onze cliënten om hen hun onroerendgoeddromen te helpen verwerkelijken.",
+      "whyChooseUs": "Waarom Voor Ons Kiezen?",
+      "verifiedProperties": "Geverifieerde Eigenschappen - Alle aanbiedingen zijn grondig geverifieerd",
+      "expertAgents": "Deskundige Agenten - Ons ervaren team begeleidt u bij elke stap",
+      "transparentPricing": "Transparante Prijsstelling - Geen verrassingskosten of verborgen gebeurtenissen",
+      "fastService": "Snelle Service - Snelle respons en efficiënte transacties"
+    },
+    "contact": {
+      "title": "Contact",
+      "getInTouch": "Neem Contact Met Ons Op",
+      "name": "Naam",
+      "email": "E-mail",
+      "message": "Bericht",
+      "send": "Verzenden",
+      "phone": "Telefoon",
+      "address": "Adres"
+    }
+  }
+}

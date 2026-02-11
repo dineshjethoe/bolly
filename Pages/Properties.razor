@@ -1,0 +1,83 @@
+@page "/properties"
+@using bolly.Models
+@using bolly.Components
+@inject IPropertyService PropertyService
+@inject LanguageService LanguageService
+@implements IAsyncDisposable
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+    <!-- Filter Section -->
+    <MudPaper Class="pa-6 mb-8" Elevation="1">
+        <PropertyFilter OnSearch="@HandleSearch" />
+    </MudPaper>
+
+    <!-- Search Results Section -->
+    @if (_isLoading)
+    {
+        <MudContainer Class="text-center py-12">
+            <MudProgressCircular Indeterminate="true" Size="Size.Large" />
+        </MudContainer>
+    }
+    else if (_hasSearched)
+    {
+        <MudPaper Class="pa-8 mb-8" Elevation="1">
+            @if (!_properties.Any())
+            {
+                <MudAlert Severity="Severity.Info">
+                    Geen resultaten gevonden met de geselecteerde criteria. Probeer andere zoekcriteria.
+                </MudAlert>
+            }
+            else
+            {
+                <MudText Typo="Typo.h4" Class="mb-6"><strong>Zoekresultaten</strong></MudText>
+                <MudText Typo="Typo.body2" Class="mb-6 mud-text-secondary">
+                    @_properties.Count resultaat(en) gevonden
+                </MudText>
+                
+                <MudGrid Spacing="3">
+                    @foreach (var property in _properties)
+                    {
+                        <MudItem xs="12" sm="6" md="4">
+                            <PropertyCard Property="@property" />
+                        </MudItem>
+                    }
+                </MudGrid>
+            }
+        </MudPaper>
+    }
+    else
+    {
+        <!-- Initial State -->
+        <MudPaper Class="pa-8 text-center py-12" Elevation="0">
+            <MudIcon Icon="@Icons.Material.Filled.SearchOff" Size="Size.Large" Class="mb-4" />
+            <MudText Typo="Typo.h6" Class="mb-2">Geen zoekopdracht gestart</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                Vul de filtercriteria in en klik op "Zoek" om onroerend goed weer te geven.
+            </MudText>
+        </MudPaper>
+    }
+</MudContainer>
+
+@code {
+    private List<Property> _properties = new();
+    private bool _isLoading = false;
+    private bool _hasSearched = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        LanguageService.OnLanguageChanged += StateHasChanged;
+    }
+
+    private async Task HandleSearch(SearchFilter filter)
+    {
+        _isLoading = true;
+        _hasSearched = true;
+        _properties = await PropertyService.SearchPropertiesAsync(filter);
+        _isLoading = false;
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        LanguageService.OnLanguageChanged -= StateHasChanged;
+    }
+}

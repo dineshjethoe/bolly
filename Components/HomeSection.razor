@@ -1,0 +1,183 @@
+@using bolly.Models
+@inject IPropertyService PropertyService
+@inject ITestimonialService TestimonialService
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-12">
+    <!-- Hero Section -->
+    <MudPaper Class="pa-12 hero-section mb-12 text-center" Style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <MudText Typo="Typo.h2" Class="mb-2"><strong>From roots to roofs, we rise together.</strong></MudText>
+        <MudText Typo="Typo.h5">We can find you the perfect property & help you locate the home of your dreams.</MudText>
+    </MudPaper>
+
+    <!-- Property Type Grid -->
+    <PropertyTypeGrid OnTypeSelected="@HandleTypeSelect" />
+
+    <!-- Search Filter -->
+    <PropertyFilter OnSearch="@HandleSearch" />
+
+    <!-- Feature Properties Section -->
+    <MudText Typo="Typo.h4" Class="mb-2">Feature Properties</MudText>
+    <MudText Typo="Typo.body1" Class="mb-6" Style="color: rgba(0,0,0,0.6);">
+        Handpicked properties showcasing the best in design, location, and lifestyle.<br/>
+        Explore homes that truly stand out in today's market.
+    </MudText>
+
+    <MudGrid Class="mb-12">
+        @foreach (var property in _featuredProperties)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <PropertyCard Property="@property" />
+            </MudItem>
+        }
+    </MudGrid>
+
+    <!-- Latest Listings Section -->
+    <MudText Typo="Typo.h4" Class="mb-2">Latest Listings</MudText>
+    <MudText Typo="Typo.body1" Class="mb-6" Style="color: rgba(0,0,0,0.6);">
+        Stay updated with the newest properties on the market. Explore fresh opportunities and find your perfect match before anyone else.
+    </MudText>
+
+    <MudGrid Class="mb-12">
+        @foreach (var property in _latestProperties.Take(6))
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <PropertyCard Property="@property" />
+            </MudItem>
+        }
+    </MudGrid>
+
+    <!-- How It Works Section -->
+    <MudPaper Class="pa-8 mb-12 bg-light">
+        <MudText Typo="Typo.h4" Class="mb-6 text-center">How it Works?</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="pa-4 text-center">
+                    <MudIcon Icon="@Icons.Material.Filled.AppRegistration" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                    <MudText Typo="Typo.h6" Class="mb-2">Register</MudText>
+                    <MudText Typo="Typo.body2" Style="color: rgba(0,0,0,0.6);">Create your account in minutes and start browsing</MudText>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="pa-4 text-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Search" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                    <MudText Typo="Typo.h6" Class="mb-2">Explore</MudText>
+                    <MudText Typo="Typo.body2" Style="color: rgba(0,0,0,0.6);">Browse our extensive property listings</MudText>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="pa-4 text-center">
+                    <MudIcon Icon="@Icons.Material.Filled.ConnectWithoutContact" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                    <MudText Typo="Typo.h6" Class="mb-2">Connect</MudText>
+                    <MudText Typo="Typo.body2" Style="color: rgba(0,0,0,0.6);">Get in touch with agents and owners</MudText>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Class="pa-4 text-center">
+                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                    <MudText Typo="Typo.h6" Class="mb-2">Complete</MudText>
+                    <MudText Typo="Typo.body2" Style="color: rgba(0,0,0,0.6);">Finalize your real estate transaction</MudText>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <!-- Call to Action Sections -->
+    <MudGrid Class="mb-12">
+        <MudItem xs="12" md="6">
+            <MudCard Class="pa-8 bg-primary text-white">
+                <MudText Typo="Typo.h5" Class="mb-2"><strong>Explore Listings</strong></MudText>
+                <MudText Typo="Typo.body1" Class="mb-4">Browse a wide range of verified properties across top locations. Find your next home or investment with RB Real Estate today.</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Surface" EndIcon="@Icons.Material.Filled.ArrowForward"
+                    Href="/properties">
+                    View All Properties
+                </MudButton>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <MudCard Class="pa-8 bg-success text-white">
+                <MudText Typo="Typo.h5" Class="mb-2"><strong>Submit Listings</strong></MudText>
+                <MudText Typo="Typo.body1" Class="mb-4">Showcase your property to thousands of potential buyers. List with RB Real Estate and get noticed fast.</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Surface" EndIcon="@Icons.Material.Filled.ArrowForward">
+                    Add Property
+                </MudButton>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <!-- Testimonials Section -->
+    <MudText Typo="Typo.h4" Class="mb-2">Clients Feedback</MudText>
+    <MudText Typo="Typo.body1" Class="mb-6" Style="color: rgba(0,0,0,0.6);">
+        Hear from our satisfied clients who found their dream properties and successful deals with RB Real Estate. Your trust drives our success.
+    </MudText>
+
+    <MudGrid Class="mb-12">
+        @foreach (var testimonial in _testimonials)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <TestimonialCard Testimonial="@testimonial" />
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+<style>
+    .hero-section {
+        border-radius: 8px;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bg-light {
+        background-color: #f5f5f5;
+    }
+
+    .bg-primary {
+        background-color: var(--mud-palette-primary) !important;
+    }
+
+    .bg-success {
+        background-color: var(--mud-palette-success) !important;
+    }
+
+    .text-white {
+        color: white !important;
+    }
+</style>
+
+@code {
+    private List<Property> _featuredProperties = new();
+    private List<Property> _latestProperties = new();
+    private List<Testimonial> _testimonials = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _featuredProperties = await PropertyService.GetFeaturedPropertiesAsync();
+        _latestProperties = await PropertyService.GetLatestPropertiesAsync();
+        _testimonials = await TestimonialService.GetAllTestimonialsAsync();
+    }
+
+    private async Task HandleTypeSelect(PropertyType type)
+    {
+        var properties = await PropertyService.GetPropertiesByTypeAsync(type);
+        _featuredProperties = properties.Where(p => p.IsFeatured).ToList();
+        if (_featuredProperties.Count < 3)
+            _featuredProperties = properties.Take(3).ToList();
+    }
+
+    private async Task HandleSearch(SearchFilter filter)
+    {
+        _featuredProperties = await PropertyService.SearchPropertiesAsync(filter);
+    }
+}

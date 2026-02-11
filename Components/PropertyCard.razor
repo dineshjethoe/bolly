@@ -1,0 +1,71 @@
+@using bolly.Models
+@implements IDisposable
+
+<MudCard Class="h-100">
+    <MudCardMedia Image="@Property.ImageUrl" Height="250" />
+    <MudCardContent>
+        <div class="d-flex justify-space-between align-center mb-2">
+            <MudChip T="string" Size="Size.Small" Color="Color.Primary">@Property.Type</MudChip>
+            <MudChip T="string" Size="Size.Small" Color="Color.Success">@Property.Status</MudChip>
+        </div>
+
+        <MudText Typo="Typo.h5" Class="mb-2">
+            <MudLink Href="@($"/properties/{Property.Id}")">
+                @Property.Title
+            </MudLink>
+        </MudText>
+
+        <MudText Typo="Typo.caption" Class="mb-3" Style="color: rgba(0,0,0,0.6);">
+            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" />
+            @Property.Location
+        </MudText>
+
+        <MudText Typo="Typo.body2" Class="mb-3">
+            @Property.Description
+        </MudText>
+
+        <div class="d-flex gap-2 mb-3 flex-wrap">
+            @if (Property.Bedrooms > 0)
+            {
+                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@Property.Bedrooms Bed</MudChip>
+            }
+            @if (Property.Bathrooms > 0)
+            {
+                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@Property.Bathrooms Bath</MudChip>
+            }
+            @if (Property.Parking > 0)
+            {
+                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@Property.Parking Park</MudChip>
+            }
+        </div>
+
+        <MudText Typo="Typo.caption" Class="mb-2" Style="color: rgba(0,0,0,0.6);">
+            Listed by: <strong>@Property.AgentName</strong>
+        </MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudText Typo="Typo.h6" Class="flex-grow-1">
+            @if (Property.Status == PropertyStatus.Rent)
+            {
+                <text>$@Property.Price.ToString("N0")</text>
+            }
+            else
+            {
+                <text>€@Property.Price.ToString("N0")</text>
+            }
+        </MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small"
+            Href="@($"/properties/{Property.Id}")">
+            View
+        </MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public Property Property { get; set; } = null!;
+
+    public void Dispose()
+    {
+    }
+}

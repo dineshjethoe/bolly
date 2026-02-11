@@ -1,0 +1,94 @@
+@page "/contact"
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="py-12">
+    <MudText Typo="Typo.h2" Class="mb-2 text-center"><strong>Contact Us</strong></MudText>
+    <MudText Typo="Typo.body1" Class="mb-8 text-center" Style="color: rgba(0,0,0,0.6);">
+        We'd love to hear from you. Get in touch with us today!
+    </MudText>
+
+    <MudGrid Class="mb-8">
+        <MudItem xs="12" sm="6">
+            <MudCard Class="pa-6 h-100">
+                <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Class="mb-2">Phone</MudText>
+                <MudLink Href="tel:+5978811195">(597) 881-1195</MudLink><br/>
+                <MudLink Href="tel:+5978876688">(597) 887-6688</MudLink>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6">
+            <MudCard Class="pa-6 h-100">
+                <MudIcon Icon="@Icons.Material.Filled.Email" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Class="mb-2">Email</MudText>
+                <MudLink Href="mailto:info@dc-rise.sr">info@dc-rise.sr</MudLink>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudCard Class="pa-8">
+        <MudText Typo="Typo.h5" Class="mb-6">Send us a Message</MudText>
+
+        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudTextField @bind-Value="name" Label="Full Name" Required="true" RequiredError="Name is required"
+                Variant="Variant.Outlined" Class="mb-4" />
+
+            <MudTextField @bind-Value="email" Label="Email" Required="true" RequiredError="Email is required"
+                Validation="@(new EmailAddressAttribute {ErrorMessage = "The email address is not valid"})"
+                Variant="Variant.Outlined" Class="mb-4" />
+
+            <MudTextField @bind-Value="phone" Label="Phone Number" Variant="Variant.Outlined" Class="mb-4" />
+
+            <MudTextField @bind-Value="subject" Label="Subject" Required="true" RequiredError="Subject is required"
+                Variant="Variant.Outlined" Class="mb-4" />
+
+            <MudTextField @bind-Value="message" Label="Message" Required="true" RequiredError="Message is required"
+                Variant="Variant.Outlined" Lines="5" Class="mb-6" />
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true"
+                OnClick="@(async () => await Submit())" Disabled="@disabled">
+                Send Message
+            </MudButton>
+        </MudForm>
+
+        @if (submitted)
+        {
+            <MudAlert Severity="Severity.Success" Class="mt-4">
+                Thank you for your message! We'll get back to you soon.
+            </MudAlert>
+        }
+    </MudCard>
+</MudContainer>
+
+@code {
+    private MudForm form = null!;
+    private bool success;
+    private string[] errors = { };
+    private bool submitted;
+    private bool disabled => !success;
+
+    private string name = string.Empty;
+    private string email = string.Empty;
+    private string phone = string.Empty;
+    private string subject = string.Empty;
+    private string message = string.Empty;
+
+    private async Task Submit()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            // Here you would typically send the message to your backend/email service
+            submitted = true;
+            ResetForm();
+        }
+    }
+
+    private void ResetForm()
+    {
+        name = string.Empty;
+        email = string.Empty;
+        phone = string.Empty;
+        subject = string.Empty;
+        message = string.Empty;
+    }
+}

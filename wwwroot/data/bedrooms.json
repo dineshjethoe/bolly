@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "Allemaal", "value": "all" },
+  { "id": 2, "name": "Studio", "value": "0" },
+  { "id": 3, "name": "1 Slaapkamer", "value": "1" },
+  { "id": 4, "name": "2 Slaapkamers", "value": "2" },
+  { "id": 5, "name": "3 Slaapkamers", "value": "3" },
+  { "id": 6, "name": "4 Slaapkamers", "value": "4" },
+  { "id": 7, "name": "5 Slaapkamers", "value": "5" },
+  { "id": 8, "name": "6+ Slaapkamers", "value": "6+" }
+]

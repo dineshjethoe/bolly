@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "Alle Soorten", "value": "all" },
+  { "id": 2, "name": "Huis", "value": "house" },
+  { "id": 3, "name": "Appartement", "value": "apartment" },
+  { "id": 4, "name": "Villa", "value": "villa" },
+  { "id": 5, "name": "Grondstuk", "value": "plot" },
+  { "id": 6, "name": "Kantoor", "value": "office" },
+  { "id": 7, "name": "Commercieel", "value": "commercial" },
+  { "id": 8, "name": "Magazijn", "value": "warehouse" }
+]

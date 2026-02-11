@@ -1,0 +1,88 @@
+@page "/about"
+@inject LanguageService LanguageService
+@implements IAsyncDisposable
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-12">
+    <MudText Typo="Typo.h2" Class="mb-6"><strong>@LanguageService.Translate("pages.about.title")</strong></MudText>
+
+    <MudGrid Class="mb-8">
+        <MudItem xs="12" md="6">
+            <MudCard Class="pa-6 h-100">
+                <MudText Typo="Typo.h5" Class="mb-4">@LanguageService.Translate("pages.about.mission")</MudText>
+                <MudText Typo="Typo.body1" Class="mb-4">
+                    @LanguageService.Translate("pages.about.missionText")
+                </MudText>
+                <MudText Typo="Typo.body1">
+                    @LanguageService.Translate("pages.about.missionText2")
+                </MudText>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <MudCard Class="pa-6 h-100">
+                <MudText Typo="Typo.h5" Class="mb-4">@LanguageService.Translate("pages.about.whyChooseUs")</MudText>
+                <div>
+                    <div class="mb-3">
+                        <MudText>@LanguageService.Translate("pages.about.verifiedProperties")</MudText>
+                    </div>
+                    <div class="mb-3">
+                        <MudText>@LanguageService.Translate("pages.about.expertAgents")</MudText>
+                    </div>
+                    <div class="mb-3">
+                        <MudText>@LanguageService.Translate("pages.about.transparentPricing")</MudText>
+                    </div>
+                    <div class="mb-3">
+                        <MudText>@LanguageService.Translate("pages.about.fastService")</MudText>
+                    </div>
+                </div>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudText Typo="Typo.h4" Class="mb-6">Our Values</MudText>
+    <MudGrid Class="mb-8">
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="pa-6 text-center">
+                <MudIcon Icon="@Icons.Material.Filled.Verified" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Class="mb-2">Trust</MudText>
+                <MudText Typo="Typo.body2">Building long-term relationships with our clients</MudText>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="pa-6 text-center">
+                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Class="mb-2">Integrity</MudText>
+                <MudText Typo="Typo.body2">Operating with honesty and ethical standards</MudText>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="pa-6 text-center">
+                <MudIcon Icon="@Icons.Material.Filled.EmojiEvents" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Class="mb-2">Excellence</MudText>
+                <MudText Typo="Typo.body2">Delivering exceptional service in all we do</MudText>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="pa-6 text-center">
+                <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Class="mb-2">Community</MudText>
+                <MudText Typo="Typo.body2">Supporting the neighborhoods we serve</MudText>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    protected override void OnInitialized()
+    {
+        LanguageService.OnLanguageChanged += StateHasChanged;
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        LanguageService.OnLanguageChanged -= StateHasChanged;
+    }
+}

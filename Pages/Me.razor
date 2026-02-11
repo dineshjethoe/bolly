@@ -1,0 +1,119 @@
+@page "/me"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationService AuthenticationService
+@inject LanguageService LanguageService
+@implements IAsyncDisposable
+
+<AuthorizeView>
+    <Authorized>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="py-12">
+            <MudText Typo="Typo.h2" Class="mb-8">Admin Dashboard</MudText>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudCard Class="pa-6">
+                        <MudText Typo="Typo.h5" Class="mb-4">Welcome to Admin</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-6">
+                            You are currently logged in. This is your admin dashboard where you can manage properties and user data.
+                        </MudText>
+
+                        <MudText Typo="Typo.body2" Class="mb-4">
+                            <strong>User ID:</strong> @context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                        </MudText>
+                        <MudText Typo="Typo.body2" Class="mb-6">
+                            <strong>Name:</strong> @context.User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                        </MudText>
+
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@HandleLogout" FullWidth="true">
+                            <MudIcon Icon="@Icons.Material.Filled.Logout" Class="mr-2" />
+                            Logout
+                        </MudButton>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudCard Class="pa-6">
+                        <MudText Typo="Typo.h5" Class="mb-4">Quick Stats</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-3">
+                            <MudIcon Icon="@Icons.Material.Filled.Home" Size="Size.Small" /> Total Properties: 9
+                        </MudText>
+                        <MudText Typo="Typo.body1" Class="mb-3">
+                            <MudIcon Icon="@Icons.Material.Filled.Business" Size="Size.Small" /> Properties for Sale: 6
+                        </MudText>
+                        <MudText Typo="Typo.body1" Class="mb-3">
+                            <MudIcon Icon="@Icons.Material.Filled.DomainAdd" Size="Size.Small" /> Properties for Rent: 3
+                        </MudText>
+                        <MudText Typo="Typo.body1">
+                            <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" /> Total Users: 1
+                        </MudText>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudCard Class="pa-6">
+                        <MudText Typo="Typo.h5" Class="mb-4">Admin Features</MudText>
+                        <MudGrid>
+                            <MudItem xs="12" sm="6" md="3">
+                                <MudButton Variant="Variant.Outlined" Color="Color.Primary" FullWidth="true" Class="py-4">
+                                    <MudStack Spacing="1">
+                                        <MudIcon Icon="@Icons.Material.Filled.Edit" Size="Size.Large" />
+                                        <MudText Typo="Typo.caption">Manage Properties</MudText>
+                                    </MudStack>
+                                </MudButton>
+                            </MudItem>
+                            <MudItem xs="12" sm="6" md="3">
+                                <MudButton Variant="Variant.Outlined" Color="Color.Primary" FullWidth="true" Class="py-4">
+                                    <MudStack Spacing="1">
+                                        <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Large" />
+                                        <MudText Typo="Typo.caption">Manage Users</MudText>
+                                    </MudStack>
+                                </MudButton>
+                            </MudItem>
+                            <MudItem xs="12" sm="6" md="3">
+                                <MudButton Variant="Variant.Outlined" Color="Color.Primary" FullWidth="true" Class="py-4">
+                                    <MudStack Spacing="1">
+                                        <MudIcon Icon="@Icons.Material.Filled.Assessment" Size="Size.Large" />
+                                        <MudText Typo="Typo.caption">Analytics</MudText>
+                                    </MudStack>
+                                </MudButton>
+                            </MudItem>
+                            <MudItem xs="12" sm="6" md="3">
+                                <MudButton Variant="Variant.Outlined" Color="Color.Primary" FullWidth="true" Class="py-4">
+                                    <MudStack Spacing="1">
+                                        <MudIcon Icon="@Icons.Material.Filled.Settings" Size="Size.Large" />
+                                        <MudText Typo="Typo.caption">Settings</MudText>
+                                    </MudStack>
+                                </MudButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </Authorized>
+    <NotAuthorized>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="py-12">
+            <MudAlert Severity="Severity.Warning" Class="mb-6">
+                <MudText Typo="Typo.h5">Access Denied</MudText>
+                <MudText Typo="Typo.body1">You are not logged in. Please log in to access the admin dashboard.</MudText>
+            </MudAlert>
+        </MudContainer>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    protected override void OnInitialized()
+    {
+        LanguageService.OnLanguageChanged += StateHasChanged;
+    }
+
+    private void HandleLogout()
+    {
+        AuthenticationService.Logout();
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        LanguageService.OnLanguageChanged -= StateHasChanged;
+    }
+}

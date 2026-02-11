@@ -1,0 +1,88 @@
+﻿@inherits LayoutComponentBase
+@inject ThemeService ThemeService
+@inject LanguageService LanguageService
+@using bolly.Themes
+
+<MudThemeProvider @ref="@_mudThemeProvider" Theme="@(ThemeService.IsDarkMode ? AppTheme.DarkTheme : AppTheme.Theme)" IsDarkMode="@ThemeService.IsDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<NavMenu />
+
+<MudMainContent>
+    @Body
+</MudMainContent>
+
+<footer class="footer bg-dark text-white py-8 mt-12">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="3" Class="mb-4">
+                <MudText Typo="Typo.h6" Class="mb-3"><strong>@LanguageService.Translate("footer.rbRealEstate")</strong></MudText>
+                <MudText Typo="Typo.body2" Style="color: rgba(255, 255, 255, 0.7);">
+                    @LanguageService.Translate("footer.tagline")
+                </MudText>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3" Class="mb-4">
+                <MudText Typo="Typo.h6" Class="mb-3"><strong>@LanguageService.Translate("footer.quickLinks")</strong></MudText>
+                <MudLink Href="/">@LanguageService.Translate("nav.home")</MudLink><br/>
+                <MudLink Href="/properties">@LanguageService.Translate("nav.properties")</MudLink><br/>
+                <MudLink Href="/about">@LanguageService.Translate("nav.about")</MudLink><br/>
+                <MudLink Href="/contact">@LanguageService.Translate("nav.contact")</MudLink>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3" Class="mb-4">
+                <MudText Typo="Typo.h6" Class="mb-3"><strong>@LanguageService.Translate("footer.contact")</strong></MudText>
+                <MudLink Href="tel:+5977628128">(597) 762-8128</MudLink><br/>
+                <MudLink Href="mailto:rbpropertiessu@gmail.com">rbpropertiessu@gmail.com</MudLink>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3" Class="mb-4">
+                <MudText Typo="Typo.h6" Class="mb-3"><strong>@LanguageService.Translate("footer.followUs")</strong></MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Inherit" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Inherit" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Link" Color="Color.Inherit" Size="Size.Small" />
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider Class="my-6" />
+
+        <MudText Typo="Typo.body2" Style="color: rgba(255, 255, 255, 0.7);" Class="text-center">
+            © 2026 DC-Rise. All rights reserved.
+        </MudText>
+    </MudContainer>
+</footer>
+
+<style>
+    .footer {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer a {
+        color: #fff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+        color: var(--mud-palette-primary);
+    }
+</style>
+
+@code {
+    private MudThemeProvider? _mudThemeProvider;
+
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += StateHasChanged;
+        LanguageService.OnLanguageChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= StateHasChanged;
+        LanguageService.OnLanguageChanged -= StateHasChanged;
+    }
+}

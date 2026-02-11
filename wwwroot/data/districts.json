@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Paramaribo", "value": "paramaribo" },
+  { "id": 2, "name": "Wanica", "value": "wanica" },
+  { "id": 3, "name": "Nickerie", "value": "nickerie" },
+  { "id": 4, "name": "Coronie", "value": "coronie" },
+  { "id": 5, "name": "Saramacca", "value": "saramacca" },
+  { "id": 6, "name": "Commewijne", "value": "commewijne" },
+  { "id": 7, "name": "Marowijne", "value": "marowijne" },
+  { "id": 8, "name": "Para", "value": "para" },
+  { "id": 9, "name": "Brokopondo", "value": "brokopondo" },
+  { "id": 10, "name": "Sipaliwini", "value": "sipaliwini" }
+]

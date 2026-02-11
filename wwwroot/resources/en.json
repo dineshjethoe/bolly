@@ -1,0 +1,55 @@
+{
+  "nav": {
+    "home": "Home",
+    "properties": "Properties",
+    "about": "About",
+    "contact": "Contact",
+    "menu": "Menu",
+    "toggleTheme": "Toggle theme",
+    "language": "Language",
+    "dutch": "Dutch",
+    "english": "English",
+    "login": "Login",
+    "logout": "Logout",
+    "admin": "Admin"
+  },
+  "footer": {
+    "dcRise": "RB Real Estate",
+    "rbRealEstate": "RB Real Estate",
+    "tagline": "From roots to roofs, we rise together.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "phone": "Phone",
+    "email": "Email",
+    "followUs": "Follow Us"
+  },
+  "pages": {
+    "properties": {
+      "title": "All Properties",
+      "loading": "Loading...",
+      "noResults": "No properties found matching your criteria.",
+      "searching": "Searching..."
+    },
+    "about": {
+      "title": "About RB Real Estate",
+      "mission": "Our Mission",
+      "missionText": "At RB Real Estate, we believe that finding the perfect property should be simple, transparent, and rewarding. Our mission is to connect buyers, sellers, and renters through a trusted, user-friendly platform that makes real estate transactions seamless and successful.",
+      "missionText2": "From roots to roofs, we rise together with our clients to help them achieve their real estate dreams.",
+      "whyChooseUs": "Why Choose Us?",
+      "verifiedProperties": "Verified Properties - All listings are thoroughly verified",
+      "expertAgents": "Expert Agents - Our experienced team guides you every step",
+      "transparentPricing": "Transparent Pricing - No surprise costs or hidden fees",
+      "fastService": "Fast Service - Quick response and efficient transactions"
+    },
+    "contact": {
+      "title": "Contact",
+      "getInTouch": "Get In Touch",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send",
+      "phone": "Phone",
+      "address": "Address"
+    }
+  }
+}

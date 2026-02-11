@@ -1,0 +1,137 @@
+﻿@inject ThemeService ThemeService
+@inject LanguageService LanguageService
+@inject AuthenticationService AuthenticationService
+@implements IAsyncDisposable
+@using Microsoft.AspNetCore.Components.Authorization
+
+<MudAppBar Elevation="0" Dense="false" Class="navbar-custom">
+    <MudContainer MaxWidth="MaxWidth.Large" Class="d-flex align-center" Style="width: 100%; padding: 0 24px;">
+        <!-- Logo -->
+        <div class="d-flex align-center me-auto">
+            <MudIcon Icon="@Icons.Material.Filled.Apartment" Color="Color.Primary" Size="Size.Large" Class="me-3" />
+            <MudText Typo="Typo.h6" Class="fw-bold">RB Real Estate</MudText>
+        </div>
+
+        <!-- Desktop Navigation: Hidden on Xs & Sm, visible on Md and larger -->
+        <MudHidden Breakpoint="Breakpoint.Sm" Invert="false">
+            <div class="nav-links">
+                <MudNavLink Href="/" Match="NavLinkMatch.All" Class="nav-item">@LanguageService.Translate("nav.home")</MudNavLink>
+                <MudNavLink Href="/properties" Class="nav-item">@LanguageService.Translate("nav.properties")</MudNavLink>
+                <MudNavLink Href="/about" Class="nav-item">@LanguageService.Translate("nav.about")</MudNavLink>
+                <MudNavLink Href="/contact" Class="nav-item">@LanguageService.Translate("nav.contact")</MudNavLink>
+            </div>
+        </MudHidden>
+
+        <!-- Right Side Actions (visible on all screen sizes) -->
+        <div class="d-flex align-center gap-2 ms-4">
+            <!-- Language Selector -->
+            <MudMenu>
+                <ActivatorContent>
+                    <MudIconButton Icon="@Icons.Material.Filled.Language" Title="@LanguageService.Translate("nav.language")" />
+                </ActivatorContent>
+                <ChildContent>
+                    <MudMenuItem OnClick="@(() => ChangeLanguage("nl"))">
+                        @if (LanguageService.CurrentLanguage == "nl")
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Class="me-2" />
+                        }
+                        @LanguageService.Translate("nav.dutch")
+                    </MudMenuItem>
+                    <MudMenuItem OnClick="@(() => ChangeLanguage("en"))">
+                        @if (LanguageService.CurrentLanguage == "en")
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Class="me-2" />
+                        }
+                        @LanguageService.Translate("nav.english")
+                    </MudMenuItem>
+                </ChildContent>
+            </MudMenu>
+
+            <!-- Theme Toggle Button -->
+            <MudIconButton 
+                Icon="@(ThemeService.IsDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)" 
+                OnClick="@(() => ThemeService.ToggleDarkMode())"
+                Title="@LanguageService.Translate("nav.toggleTheme")" />
+
+                 <!-- Authentication -->
+            <AuthorizeView>
+                <Authorized>
+                    <MudIconButton Icon="@Icons.Material.Filled.Person" Href="/me" Title="Admin" />
+                </Authorized>
+                <NotAuthorized>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" 
+                        OnClick="@(() => AuthenticationService.Login("aad"))">
+                        <MudIcon Icon="@Icons.Material.Filled.Login" Class="mr-2" />
+                        Login
+                    </MudButton>
+                </NotAuthorized>
+            </AuthorizeView>
+
+            <!-- Mobile Hamburger Button: Visible only on Xs & Sm, hidden on Md and larger -->
+            <MudHidden Breakpoint="Breakpoint.Md" Invert="false">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="@(DrawerToggle)" Title="@LanguageService.Translate("nav.menu")" />
+            </MudHidden>
+        </div>
+    </MudContainer>
+</MudAppBar>
+
+<!-- Mobile Side Drawer: Visible only on Xs & Sm, hidden on Md and larger -->
+<MudHidden Breakpoint="Breakpoint.Md" Invert="false">
+    <MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Start" Elevation="1">
+        <MudDrawerHeader Class="pa-6">
+            <div class="d-flex align-center gap-3">
+                <MudIcon Icon="@Icons.Material.Filled.Apartment" Color="Color.Primary" Size="Size.Large" />
+                <MudText Typo="Typo.h6" Class="fw-bold">RB Real Estate</MudText>
+            </div>
+        </MudDrawerHeader>
+        <MudDivider />
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All" OnClick="@(CloseDrawer)" Icon="@Icons.Material.Filled.Home">@LanguageService.Translate("nav.home")</MudNavLink>
+            <MudNavLink Href="/properties" OnClick="@(CloseDrawer)" Icon="@Icons.Material.Filled.Business">@LanguageService.Translate("nav.properties")</MudNavLink>
+            <MudNavLink Href="/about" OnClick="@(CloseDrawer)" Icon="@Icons.Material.Filled.Info">@LanguageService.Translate("nav.about")</MudNavLink>
+            <MudNavLink Href="/contact" OnClick="@(CloseDrawer)" Icon="@Icons.Material.Filled.Mail">@LanguageService.Translate("nav.contact")</MudNavLink>
+            <MudDivider Class="my-2" />
+            <div class="px-4 py-2">
+                <MudText Typo="Typo.caption" Class="fw-bold">@LanguageService.Translate("nav.language")</MudText>
+                <div class="d-flex gap-2 mt-2">
+                    <MudButton Size="Size.Small" Variant="@(LanguageService.CurrentLanguage == "nl" ? Variant.Filled : Variant.Text)" Color="Color.Primary" OnClick="@(() => ChangeLanguage("nl"))">
+                        @LanguageService.Translate("nav.dutch")
+                    </MudButton>
+                    <MudButton Size="Size.Small" Variant="@(LanguageService.CurrentLanguage == "en" ? Variant.Filled : Variant.Text)" Color="Color.Primary" OnClick="@(() => ChangeLanguage("en"))">
+                        @LanguageService.Translate("nav.english")
+                    </MudButton>
+                </div>
+            </div>
+        </MudNavMenu>
+    </MudDrawer>
+</MudHidden>
+
+@code {
+    private bool _drawerOpen = false;
+
+    protected override void OnInitialized()
+    {
+        LanguageService.OnLanguageChanged += StateHasChanged;
+    }
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void CloseDrawer()
+    {
+        _drawerOpen = false;
+    }
+
+    private void ChangeLanguage(string languageCode)
+    {
+        LanguageService.SetLanguage(languageCode);
+        StateHasChanged();
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        LanguageService.OnLanguageChanged -= StateHasChanged;
+    }
+}

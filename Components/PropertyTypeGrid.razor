@@ -1,0 +1,77 @@
+@using bolly.Models
+
+<MudGrid Class="mb-6">
+    <MudItem xs="12">
+        <MudText Typo="Typo.h4" Class="mb-4">Property Types</MudText>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="pa-4 property-type-card cursor-pointer" @onclick="@(() => OnTypeClick(PropertyType.Plot))">
+            <MudIcon Icon="@Icons.Material.Filled.Landscape" Size="Size.Large" Color="Color.Primary" Class="mb-2" />
+            <MudText Typo="Typo.h6">Plots</MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="pa-4 property-type-card cursor-pointer" @onclick="@(() => OnTypeClick(PropertyType.House))">
+            <MudIcon Icon="@Icons.Material.Filled.House" Size="Size.Large" Color="Color.Primary" Class="mb-2" />
+            <MudText Typo="Typo.h6">House</MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="pa-4 property-type-card cursor-pointer" @onclick="@(() => OnTypeClick(PropertyType.Apartment))">
+            <MudIcon Icon="@Icons.Material.Filled.Apartment" Size="Size.Large" Color="Color.Primary" Class="mb-2" />
+            <MudText Typo="Typo.h6">Apartment</MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="pa-4 property-type-card cursor-pointer" @onclick="@(() => OnTypeClick(PropertyType.Villa))">
+            <MudIcon Icon="@Icons.Material.Filled.Villa" Size="Size.Large" Color="Color.Primary" Class="mb-2" />
+            <MudText Typo="Typo.h6">Villa</MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="pa-4 property-type-card cursor-pointer" @onclick="@(() => OnTypeClick(PropertyType.Office))">
+            <MudIcon Icon="@Icons.Material.Filled.Apartment" Size="Size.Large" Color="Color.Primary" Class="mb-2" />
+            <MudText Typo="Typo.h6">Office</MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="pa-4 property-type-card cursor-pointer" @onclick="@(() => OnTypeClick(PropertyType.Warehouse))">
+            <MudIcon Icon="@Icons.Material.Filled.Storage" Size="Size.Large" Color="Color.Primary" Class="mb-2" />
+            <MudText Typo="Typo.h6">Warehouse</MudText>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<style>
+    .property-type-card {
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .property-type-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--mud-palette-primary);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public EventCallback<PropertyType> OnTypeSelected { get; set; }
+
+    private async Task OnTypeClick(PropertyType type)
+    {
+        await OnTypeSelected.InvokeAsync(type);
+    }
+}
